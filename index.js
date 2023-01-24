@@ -1,98 +1,35 @@
-//Creating server:
+//Contains opening dependencies and PORT information:
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const PORT = 3000;
 
+//Router imports
+const userRouter = require('./route-files/user_routes');
+// const ticketRouter = require('./route-files/ticket_routes');
+
+
+const PORT = 3000;
 const server = express();
 
 server.use(bodyParser.json());
+server.use(userRouter);
+// server.use(ticketRouter);
 
-//test endpoint
-server.get('/employee', (req, res) =>{
-    res.status(200).send("You have reached the employee login page.")
-});
 server.listen(PORT, () => {
-    console.log(`Server is listening on port ${PORT}`);
-});
+    console.log(`Listening on port ${PORT}`);
+}); 
 
-module.exports = server;
-
-//Simple server working!
-
-const AWS = require('aws-sdk');
-const uuid = require ('uuid');
-
-AWS.config.update({
-    region: 'us-east-1'
-});
-
-const documentClient = new AWS.DynamoDB.DocumentClient();
-
-const params = {
-    TableName: 'Users',
-    Item: {
-        user_name: 'testie',
-        password: 'test123',
-        role: 'employee'
-    }
-};
-
-documentClient.put(params, (err) => {
-    if(err) {
-        console.log(err);
-    } else {
-        console.log("Successfully added user");
-    }
-});
-
-// function retrieveUserName(username) {
-//     const params = {
-//         TableName: 'Users',
-//         Key: {
-//             username
-//         }
-//     };
-
-//     return documentClient.get(params).promise();
-// }
-
-
-// server.post('/login', async (req, res) => {
-//     const username = req.body.username;
-//     const password = req.body.password;
-
-//     const data = await retrieveUserName(username);
-//     const userItem = data.Item;
-
-// //To see if user with given username exists:
-//     if (userItem) {
-//         if (userItem.password === password) {
-//             //Successful login! Create JWT:
-//             // const token = createJWT(userItem.username, userItem.role);
-
-//             res.send({
-//                 "message": "Successfully logged in",
-//                 "token": token
-//             });
-//         } else {
-//             res.statusCode = 400;
-//             res.send({
-//                 "message": "Incorrect password."
-//             })
-//         }
-//     } else {
-//         res.statusCode = 400;
-//         res.send({
-//             "message": `User with username ${username} does not exist`
-//         })
-//     }
+//Testing 'registerNewAccount' function: 
+// registerNewAccount();
+// .then((data) => {
+//     console.log('Adding user successful');
+// }).catch((err) => {
+//     console.log('An error occurred')
+//     console.error(err);
 // });
 
-
-
-
-
+//Testing 'login' function: 
+// login();
 
 
 
