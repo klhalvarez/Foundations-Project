@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
     res.send("Welcome to the home page.");
 });
 
-//Endpoint for employees to log in:
+//Endpoint for employees to log in: 
 router.post('/login', async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;

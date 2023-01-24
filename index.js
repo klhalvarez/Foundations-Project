@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 
 //Router imports
 const userRouter = require('./route-files/user_routes');
-// const ticketRouter = require('./route-files/ticket_routes');
+const ticketRouter = require('./route-files/ticket_routes');
 
 
 const PORT = 3000;
@@ -18,18 +18,6 @@ server.use(userRouter);
 server.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
 }); 
-
-//Testing 'registerNewAccount' function: 
-// registerNewAccount();
-// .then((data) => {
-//     console.log('Adding user successful');
-// }).catch((err) => {
-//     console.log('An error occurred')
-//     console.error(err);
-// });
-
-//Testing 'login' function: 
-// login();
 
 
 

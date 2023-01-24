@@ -10,7 +10,7 @@ const docClient = new AWS.DynamoDB.DocumentClient();
 //Function to retrieve Username from DB
 function retrieveUserName(username) {
     return docClient.get({
-        TableName: 'Users',
+        TableName: "Users",
         Key: {
             "username": username
         }
