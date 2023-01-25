@@ -7,6 +7,7 @@ AWS.config.update({
 });
 
 const docClient = new AWS.DynamoDB.DocumentClient();
+
 let randomNumber = (Math.floor(Math.random()*1000));
 //Gives a random whole number
 
@@ -24,7 +25,7 @@ function newTicket($amount, description, username) {
     }).promise();
 }
 
-//Testing newTicket function: WORKS!
+// Testing newTicket function: WORKS!
 // newTicket(545.89, 'week1 car rental', 'parkjimin').then(data => {
 //     console.log(data);
 //     console.log("New ticket added successfully");
@@ -32,6 +33,31 @@ function newTicket($amount, description, username) {
 //     console.error(err);
 // });
 
+//Function to retrieve all tickets by status:
+function retrieveTicketsByStatus(status) {
+    return docClient.query({
+        TableName: "Tickets",
+        IndexName: "status-index",
+        KeyConditionExpression: "#b = :value",
+        ExpressionAttributeNames: {
+            "#b": "status"
+        },
+        ExpressionAttributeValues: {
+            ":value": status
+        }
+    }).promise();
+}
+
+//Testing retrieveTicketsByStatus function: WORKS!
+// retrieveTicketsByStatus('pending').then(data => {
+//     console.log(data);
+//     console.log("Tickets gathered successfully");
+// }).catch(err => {
+//     console.error(err);
+// });
+
+
 module.exports = {
-    newTicket
+    newTicket,
+    retrieveTicketsByStatus
 };
