@@ -13,7 +13,7 @@ const server = express();
 
 server.use(bodyParser.json());
 server.use(userRouter);
-// server.use(ticketRouter);
+server.use(ticketRouter);
 
 server.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);

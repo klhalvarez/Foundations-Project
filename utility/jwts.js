@@ -1,3 +1,5 @@
+//Contains functionality relating to creating and verifying JSON web tokens:
+
 //Need to install jsonwebtoken and import it
 const jwt = require('jsonwebtoken');
 const Promise = require('bluebird');
@@ -18,13 +20,13 @@ function newToken(username, role) {
 // console.log(token);
 
 //Function to return a promise that contains the payload when the promise is resolved:
-function verifyTokenAndReturnPayload(token) {
+function verifyToken(token) {
     jwt.verify = Promise.promisify(jwt.verify); 
     return jwt.verify(token, 'thissecretsignsthetoken'); 
 }
 
-//Test for verifyTokenAndReturnPayload function: WORKS!
-// verifyTokenAndReturnPayload(newToken('user123', 'admin')).then((payload) => {
+//Test for verifyToken function: WORKS!
+// verifyToken(newToken('user123', 'admin')).then((payload) => {
 //     console.log(payload);
 // }).catch((err) => {
 //     console.error(err);
@@ -34,5 +36,5 @@ function verifyTokenAndReturnPayload(token) {
 
 module.exports = {
     newToken,
-    verifyTokenAndReturnPayload
+    verifyToken
 }

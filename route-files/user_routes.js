@@ -1,8 +1,8 @@
-//Handles HTTP user-related requests:
+//Handles HTTP endpoints for user-related requests:
 
 const express = require('express');
 const router = express.Router();
-
+const jwt = require('../utility/jwts');
 
 const userDao = require('../dao-files/user_dao');
 
@@ -23,8 +23,8 @@ router.post('/login', async (req, res) => {
         if (userItem.password === password) {
             res.send({
                 "message": "You have successfully logged in.",
-//                 "token": jwtUtil.createToken(userItem.username, userItem.role)
-// //This forms the 'payload' of the token
+                "token": jwt.newToken(userItem.username, userItem.role)
+//To get 'payload' for token
             });
         } else {
             res.statusCode = 400;
@@ -41,9 +41,10 @@ router.post('/login', async (req, res) => {
 });
 
 //Endpoint for employees to register a new account:
-router.post('/newuser', async (req, res) => {
+router.post('/register', async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
+
 //Check if user with username already exists
     const data = await userDao.retrieveUserName(username);
     if (data.Item) { 
