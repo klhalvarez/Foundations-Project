@@ -41,7 +41,7 @@ router.post('/login', async (req, res) => {
 });
 
 //Endpoint for employees to register a new account:
-router.post('/register', async (req, res) => {
+router.post('/employee/register', async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 

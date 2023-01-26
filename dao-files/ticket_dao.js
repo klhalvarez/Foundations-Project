@@ -9,7 +9,8 @@ AWS.config.update({
 const docClient = new AWS.DynamoDB.DocumentClient();
 
 let randomNumber = (Math.floor(Math.random()*1000));
-//Gives a random whole number
+//Gives a random whole number. Used here for numbering newly created tickets
+
 
 //Function to add reimbursement ticket to database for review:
 function newTicket($amount, description, username) {
@@ -33,6 +34,7 @@ function newTicket($amount, description, username) {
 //     console.error(err);
 // });
 
+
 //Function to retrieve all tickets by status:
 function retrieveTicketsByStatus(status) {
     return docClient.query({
@@ -50,14 +52,91 @@ function retrieveTicketsByStatus(status) {
 
 //Testing retrieveTicketsByStatus function: WORKS!
 // retrieveTicketsByStatus('pending').then(data => {
-//     console.log(data);
+//     const pendingTicketsQueue = [];
+//     pendingTicketsQueue.push(data);
+//     console.log(pendingTicketsQueue);
 //     console.log("Tickets gathered successfully");
 // }).catch(err => {
 //     console.error(err);
 // });
 
 
+//Function to retrieve tickets by ticketID (so managers can process):
+function retrieveTicketByTicketID(ticket_id) {
+    const params = {
+        TableName: "Tickets",
+        Key: {
+            "ticket_id": ticket_id
+        }
+    }
+    return docClient.get(params).promise();
+}
+
+//Testing retrieveTicketByTicketID function: WORKS!
+// retrieveTicketByTicketID(502).then(data => {
+//     console.log(data);
+//     console.log("Ticket gathered successfully");
+// }).catch(err => {
+//     console.error(err);
+// });
+
+
+function updateTicketStatusByTicketID(ticket_id, updatedStatus) {
+    return docClient.update({
+        TableName: "Tickets",
+        Key: {
+            "ticket_id": ticket_id
+        },
+        UpdateExpression: 'set #t = :value',
+        ExpressionAttributeNames: {
+            '#t': 'status'
+        },
+        ExpressionAttributeValues: {
+            ':value': updatedStatus
+        }
+    }).promise();
+};
+
+//Testing updateTicketStatusByTicketID function: WORKS!
+// updateTicketStatusByTicketID(502, 'approved').then(data => {
+//     console.log(data)
+//     console.log("Ticket updated successfully");
+// }).catch(err => {
+//     console.error(err);
+// });
+
+
+//Function for employees to retrieve their tickets by their username
+function retrieveTicketsByUsername(username) {
+    return docClient.query({
+        TableName: "Tickets",
+        IndexName: "username-index",
+        KeyConditionExpression: "#s = :value",
+        ExpressionAttributeNames: {
+            "#s": "username"
+        },
+        ExpressionAttributeValues: {
+            ":value": username
+        }
+    }).promise();
+}
+
+//Testing retrieveTicketsByUsername function: WORKS!
+// retrieveTicketsByUsername('parkjimin').then(data => {
+//     const employeeTicketsQueue = [];
+//     employeeTicketsQueue.push(data);
+//     console.log(employeeTicketsQueue);
+//     console.log("Tickets gathered successfully");
+// }).catch(err => {
+//     console.error(err);
+// });
+    
+
+
 module.exports = {
     newTicket,
-    retrieveTicketsByStatus
+    retrieveTicketsByStatus,
+    retrieveTicketByTicketID,
+    updateTicketStatusByTicketID,
+    retrieveTicketsByUsername
 };
