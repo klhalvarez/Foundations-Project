@@ -7,6 +7,7 @@ AWS.config.update({
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 
+
 //Function to retrieve Username from DB
 function retrieveUserName(username) {
     return docClient.get({
@@ -16,7 +17,6 @@ function retrieveUserName(username) {
         }
     }).promise();
 }
-
 
 //Testing 'retrieveUserName' function: WORKS!
 // retrieveUserName('parkjimin').then(data => {
@@ -43,14 +43,6 @@ function registerNewUser(username, password) {
 // }).catch(err => {
 //     console.error(err);
 // });
-
-
-
-
-
-
-
-
 
 
 module.exports = {

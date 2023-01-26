@@ -11,6 +11,7 @@ router.get('/', (req, res) => {
     res.send("Welcome to the home page.");
 });
 
+
 //Endpoint for employees to log in: 
 router.post('/login', async (req, res) => {
     const username = req.body.username;
@@ -40,6 +41,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
+
 //Endpoint for employees to register a new account:
 router.post('/employee/register', async (req, res) => {
     const username = req.body.username;
@@ -59,5 +61,6 @@ router.post('/employee/register', async (req, res) => {
         })
     }
     });
+    
 
 module.exports = router;

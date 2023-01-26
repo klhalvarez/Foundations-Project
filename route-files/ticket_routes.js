@@ -17,10 +17,18 @@ router.post('/tickets/employee/submit', async (req, res) => {
         const tokenPayload = await jwt.verifyToken(token);
 
         if (tokenPayload.role === 'employee') {
-            await ticketDao.newTicket(req.body.$amount, req.body.description, tokenPayload.username);
-            res.send({
-                "message": "New ticket successfully added to system."
-            })
+            const amount = req.body.$amount;
+            const description = req.body.description;
+            if (amount === " " || description === " ") {
+                res.send({
+                    "message": "Your ticket MUST have an amount and description to be entered into the system. Please try again."
+                })
+            } else {
+                await ticketDao.newTicket(req.body.$amount, req.body.description, tokenPayload.username);
+                res.send({
+                    "message": "New ticket successfully added to system."
+                })
+            }
         } else {
             res.statusCode = 401;
             res.send({
@@ -154,6 +162,7 @@ router.post('/tickets/manager/process', async (req, res) => {
         }
     }
 });
+
 
 //Endpoint for employees to view their tickets:
 router.get('/tickets/employee/view', async (req, res) => {
