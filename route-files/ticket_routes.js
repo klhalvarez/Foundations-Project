@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 
 const jwt = require('../utility/jwts');
+const uuid = require ('uuid');
 
 const ticketDao = require('../dao-files/ticket_dao');
 
@@ -24,7 +25,7 @@ router.post('/tickets/employee/submit', async (req, res) => {
                     "message": "Your ticket MUST have an amount and description to be entered into the system. Please try again."
                 })
             } else {
-                await ticketDao.newTicket(req.body.$amount, req.body.description, tokenPayload.username);
+                await ticketDao.newTicket(uuid.v4(), req.body.$amount, req.body.description, tokenPayload.username);
                 res.send({
                     "message": "New ticket successfully added to system."
                 })
@@ -70,9 +71,6 @@ router.get('/tickets/manager/status', async (req, res) => {
             pendingTicketsQueue.push(pendingTickets);
             if (pendingTickets.Items.length > 0) {
                     res.send(pendingTicketsQueue);
-                    res.send({
-                        "message": "Returned all tickets with 'pending' status."
-                    })
             } else {
                 res.send('There are no pending tickets to be viewed now.')
             }

@@ -1,6 +1,7 @@
 //Contains ticket-related functions handling creation and approval of reimbursement tickets:
 
 const AWS = require('aws-sdk');
+const uuid = require ('uuid');
 
 AWS.config.update({
     region: 'us-east-1'
@@ -8,16 +9,12 @@ AWS.config.update({
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 
-let randomNumber = (Math.floor(Math.random()*1000));
-//Gives a random whole number. Used here for numbering newly created tickets
-
-
 //Function to add reimbursement ticket to database for review:
-function newTicket($amount, description, username) {
+function newTicket(ticket_id, $amount, description, username) {
     return docClient.put({
         TableName: "Tickets",
         Item: {
-            "ticket_id": randomNumber,
+            "ticket_id": ticket_id,
             "$amount": $amount,
             "description": description,
             "username": username,
@@ -27,7 +24,7 @@ function newTicket($amount, description, username) {
 }
 
 // Testing newTicket function: WORKS!
-// newTicket(545.89, 'week1 car rental', 'parkjimin').then(data => {
+// newTicket(uuid.v4(), 545.89, 'week1 car rental', 'parkjimin').then(data => {
 //     console.log(data);
 //     console.log("New ticket added successfully");
 // }).catch(err => {
